@@ -26,11 +26,11 @@
                                         <form method="post">
                                             <div class="form-floating mb-3">
                                                 <!-- 'name' digunakan sebagai identitas ketika dipanggil untuk proses query -->
-                                                <input name="username" class="form-control" id="inputEmail" type="text" placeholder="John Doe" />
+                                                <input name="username" class="form-control" id="inputEmail" type="text" placeholder="John Doe" required/>
                                                 <label for="inputEmail">Username</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input name="password" class="form-control" id="inputPassword" type="password" placeholder="Password" />
+                                                <input name="password" class="form-control" id="inputPassword" type="password" placeholder="Password" required/>
                                                 <label for="inputPassword">Password</label>
                                             </div>                                           
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">                                                
