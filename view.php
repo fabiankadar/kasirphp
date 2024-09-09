@@ -1,5 +1,18 @@
 <?php
     require 'ceklogin.php';
+    if(isset($_GET['idp'])) {
+        $idp = $_GET['idp'];
+
+        $ambilnamapelanggan = mysqli_query($koneksi,
+        "SELECT * FROM pesanan p, pelanggan pl 
+        WHERE p.idpelanggan=pl.idpelanggan
+        AND p.idpesanan='$idp'");
+
+        $anp = mysqli_fetch_array($ambilnamapelanggan);
+        $namapelanggan = $anp['namapelanggan'];
+    } else {
+        header('location:index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,7 +22,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Stok Donat</title>
+        <title>Data Pesanan</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -53,57 +66,52 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Stok Donat</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Stok donat hari ini</li>
-                        </ol>
-                        <div class="row">
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Jumlah Donat :</div>
-                                </div>
-                            </div>                            
-                        </div>
-                        <!-- Tombol untuk membuka modal, kode modal ada di bawah -->
-                        <button type="button" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#myModal">
-                            Tambah Stok
+                        <h1 class="mt-4">Data Pesanan: <?=$idp;?></h1>
+                        <h3 class="mt-4">Nama Pelanggan: <?=$namapelanggan;?></h3>
+                         <!-- Tombol untuk membuka modal, kode modal ada di bawah -->
+                         <button type="button" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#myModal">
+                            Pesan Donat
                         </button>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Data Donat
+                                Detail Pesanan
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama Donat</th>
-                                            <th>Harga</th>
-                                            <th>Stok</th>
+                                            <th>Nama Produk</th>
+                                            <th>Harga Satuan</th>
+                                            <th>Jumlah</th>
+                                            <th>Sub-Total</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>                                    
                                     <tbody>
-                                        <?php
+                                    <?php
                                         //Memasukkan semua data dari tabel produk ke variabel ambil
-                                            $ambil = mysqli_query($koneksi, "SELECT * FROM produk");
-                                            $i = 1; //Digunakan sebagai penomoran, karena penambahan while loop (iterasi)
-
+                                            $ambil = mysqli_query($koneksi,
+                                            "SELECT * FROM detailpesanan p, produk pr 
+                                            WHERE p.idproduk = pr.idproduk
+                                            AND idpesanan='$idp'");
+                                        $i=1;
                                         //Selama variabel produk memiliki nilai, tampilkan data ke website
                                         //Start of while
-                                            while($produk = mysqli_fetch_array($ambil)) {
-                                                $namaproduk = $produk['namaproduk'];
-                                                $harga = $produk['harga'];
-                                                $stok = $produk['stok'];
-                                            
+                                            while($pesanan = mysqli_fetch_array($ambil)) {
+                                                $namaproduk = $pesanan['namaproduk'];
+                                                $harga = $pesanan['harga'];
+                                                $qty = $pesanan['qty'];
+                                                $subtotal = $harga * $qty;
                                         ?>
                                         <tr>
                                             <td><?=$i++;?></td>
                                             <td><?=$namaproduk;?></td>
-                                            <td><?=$harga;?></td>
-                                            <td><?=$stok;?></td>
-                                            <td>Edit Delete</td>
+                                            <td>Rp. <?=number_format($harga);?></td>
+                                            <td><?=number_format($qty);?></td>
+                                            <td>Rp. <?=number_format($subtotal);?></td>
+                                            <td>Edit Hapus</td>
                                         </tr>
                                         <?php
                                             } //End of while
@@ -144,7 +152,7 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Tambah Stok Donat</h4>
+        <h4 class="modal-title">Pilih Donat</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
@@ -152,14 +160,36 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-        <input type="text" name="namaproduk" id="" class="form-control" placeholder="Nama Donat">
-        <input type="num" name="harga" id="" class="form-control mt-2" placeholder="Harga">
-        <input type="num" name="stok" id="" class="form-control mt-2" placeholder="Stok">
+        <select name="idproduk" class="form-control">
+            <?php 
+            $ambilproduk = mysqli_query($koneksi, 
+                "SELECT * FROM produk
+                WHERE idproduk
+                NOT IN (SELECT idproduk FROM detailpesanan WHERE idpesanan='$idp')");
+
+            while($produk = mysqli_fetch_array($ambilproduk)) {
+                $idproduk = $produk['idproduk'];
+                $namaproduk = $produk['namaproduk'];
+                $harga = $produk['harga'];
+                $stok = $produk['stok'];
+            
+            ?>
+
+            <option value="<?=$idproduk;?>">
+            <?=$namaproduk;?> - Rp.<?=$harga;?> - Stok:<?=$stok;?>
+            </option>
+
+            <?php
+            }
+            ?>
+        </select>
+        <input type="number" name="qty" class="form-control mt-2" placeholder="Jumlah">
+        <input type="hidden" name="idp" value="<?=$idp;?>">
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success" name="tambahstok">Tambahkan</button>
+        <button type="submit" class="btn btn-success" name="pilihdonat">Tambahkan</button>
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batalkan</button>
       </div>
 
@@ -168,5 +198,4 @@
     </div>    
   </div>
 </div>
-
 </html>

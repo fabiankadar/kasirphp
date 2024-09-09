@@ -1,5 +1,13 @@
 <?php
     require 'function.php';
+
+    //Cek apakah sesi loginsuccess tidak berlangsung
+    if(!isset($_SESSION['loginsuccess'])) {
+
+    } else {
+    //Halaman login.php tidak bisa diakses bila sesi sedang berlangsung
+        header('location:index.php');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

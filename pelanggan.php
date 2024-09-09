@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Stok Donat</title>
+        <title>Kelola Pelanggan</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -53,56 +53,53 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Stok Donat</h1>
-                        <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Stok donat hari ini</li>
-                        </ol>
+                        <h1 class="mt-4">Kelola Pelanggan</h1>
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Jumlah Donat :</div>
+                                    <div class="card-body">Jumlah Pelanggan :</div>
                                 </div>
                             </div>                            
                         </div>
                         <!-- Tombol untuk membuka modal, kode modal ada di bawah -->
                         <button type="button" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#myModal">
-                            Tambah Stok
+                            Tambah Pelanggan
                         </button>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Data Donat
+                                Data Pelanggan
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
-                                            <th>Nama Donat</th>
-                                            <th>Harga</th>
-                                            <th>Stok</th>
+                                            <th>No.</th>
+                                            <th>Nama Pelanggan</th>
+                                            <th>No. Telepon</th>
+                                            <th>Alamat</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>                                    
                                     <tbody>
                                         <?php
                                         //Memasukkan semua data dari tabel produk ke variabel ambil
-                                            $ambil = mysqli_query($koneksi, "SELECT * FROM produk");
+                                            $ambil = mysqli_query($koneksi, "SELECT * FROM pelanggan");
                                             $i = 1; //Digunakan sebagai penomoran, karena penambahan while loop (iterasi)
 
                                         //Selama variabel produk memiliki nilai, tampilkan data ke website
                                         //Start of while
-                                            while($produk = mysqli_fetch_array($ambil)) {
-                                                $namaproduk = $produk['namaproduk'];
-                                                $harga = $produk['harga'];
-                                                $stok = $produk['stok'];
+                                            while($pelanggan = mysqli_fetch_array($ambil)) {
+                                                $namapelanggan = $pelanggan['namapelanggan'];
+                                                $notelp = $pelanggan['notelp'];
+                                                $alamat = $pelanggan['alamat'];
                                             
                                         ?>
                                         <tr>
                                             <td><?=$i++;?></td>
-                                            <td><?=$namaproduk;?></td>
-                                            <td><?=$harga;?></td>
-                                            <td><?=$stok;?></td>
+                                            <td><?=$namapelanggan;?></td>
+                                            <td><?=$notelp;?></td>
+                                            <td><?=$alamat;?></td>
                                             <td>Edit Delete</td>
                                         </tr>
                                         <?php
@@ -144,7 +141,7 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Tambah Stok Donat</h4>
+        <h4 class="modal-title">Tambah Pelanggan</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
@@ -152,14 +149,14 @@
 
       <!-- Modal body -->
       <div class="modal-body">
-        <input type="text" name="namaproduk" id="" class="form-control" placeholder="Nama Donat">
-        <input type="num" name="harga" id="" class="form-control mt-2" placeholder="Harga">
-        <input type="num" name="stok" id="" class="form-control mt-2" placeholder="Stok">
+        <input type="text" name="namapelanggan" id="" class="form-control" placeholder="Nama Pelanggan">
+        <input type="text" name="notelp" id="" class="form-control mt-2" placeholder="No. Telepon">
+        <input type="text" name="alamat" id="" class="form-control mt-2" placeholder="Alamat">
       </div>
 
       <!-- Modal footer -->
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success" name="tambahstok">Tambahkan</button>
+        <button type="submit" class="btn btn-success" name="tambahpelanggan">Tambahkan</button>
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batalkan</button>
       </div>
 
