@@ -58,7 +58,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Stok Donat</h1>
+                        <h1 class="mt-4">Donat</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Stok donat hari ini</li>
                         </ol>
@@ -71,7 +71,7 @@
                         </div>
                         <!-- Tombol untuk membuka modal, kode modal ada di bawah -->
                         <button type="button" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#myModal">
-                            Tambah Stok
+                            Tambah Jenis Donat
                         </button>
                         <div class="card mb-4">
                             <div class="card-header">
@@ -149,7 +149,7 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">Tambah Stok Donat</h4>
+        <h4 class="modal-title">Tambah Jenis Donat</h4>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 

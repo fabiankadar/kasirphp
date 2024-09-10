@@ -32,7 +32,7 @@ if(isset($_POST['login'])){
     }
 }
 
-// Fungsi modal untuk halman stok.php
+// Fungsi modal untuk halaman stok.php
 if(isset($_POST['tambahstok'])) {
     $namaproduk = $_POST['namaproduk'];
     $harga = $_POST['harga'];
@@ -142,5 +142,39 @@ if(isset($_POST['pilihdonat'])) {
             </script>
             ';
     }
+}
+
+//Fungsi modal untuk halaman view.php, hapus pilihan donat
+if(isset($_POST['hapuspilihan'])) {
+    $idp = $_POST['idp']; //Ini iddetailpesanan, bukan idpesanan lihat halaman view.php
+    $idpr = $_POST['idpr'];
+    $idpesanan = $_POST['idpesanan'];
+
+    // Cek qty saat ini
+    $cek1 = mysqli_query($koneksi, "SELECT * FROM detailpesanan WHERE iddetailpesanan='$idp'");
+    $cek2 = mysqli_fetch_array($cek1);
+    $qtysekarang = $cek2['qty'];
+
+    //Cek stok saat ini
+    $cek3 = mysqli_query($koneksi, "SELECT * FROM produk WHERE idproduk='$idpr'");
+    $cek4 = mysqli_fetch_array($cek3);
+    $stokdonat = $cek4['stok'];
+
+    $hitungstok = $stokdonat + $qtysekarang;
+
+    $updatestok = mysqli_query($koneksi, "UPDATE produk SET stok='$hitungstok' WHERE idproduk ='$idpr'");
+    $hapuspilihan = mysqli_query($koneksi, "DELETE FROM detailpesanan WHERE idproduk='$idpr' and iddetailpesanan='$idp'");
+
+    if($updatestok&&$hapuspilihan) {
+        header('location:view.php?idp='.$idpesanan);
+    } else {
+        echo '
+            <script>
+                alert("Gagal menghapus pilihan donat");
+                window.location.href="view.php?idp='.$idpesanan.'";
+            </script>
+            ';
+    }
+
 }
 ?>

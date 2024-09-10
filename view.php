@@ -100,6 +100,8 @@
                                         //Selama variabel produk memiliki nilai, tampilkan data ke website
                                         //Start of while
                                             while($pesanan = mysqli_fetch_array($ambil)) {
+                                                $idpr = $pesanan['idproduk'];
+                                                $iddp = $pesanan['iddetailpesanan'];
                                                 $namaproduk = $pesanan['namaproduk'];
                                                 $harga = $pesanan['harga'];
                                                 $qty = $pesanan['qty'];
@@ -111,8 +113,47 @@
                                             <td>Rp. <?=number_format($harga);?></td>
                                             <td><?=number_format($qty);?></td>
                                             <td>Rp. <?=number_format($subtotal);?></td>
-                                            <td>Edit Hapus</td>
+                                            <td>Edit
+                                            <button type="button" class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#delete<?=$idpr;?>">
+                                            Hapus
+                                            </button>
+                                            </td>
                                         </tr>
+
+                                                    <!-- Modal untuk menghapus pilihan donat -->
+                                        <div class="modal fade" id="delete<?=$idpr;?>">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Konfirmasi Penghapusan</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <form method="post">
+
+                                            <!-- Modal body -->
+                                            <div class="modal-body">
+                                                Konfirmasi ulang penghapusan
+                                                <input type="hidden" name="idp" value="<?=$iddp;?>">
+                                                <input type="hidden" name="idpr" value="<?=$idpr;?>">
+                                                <input type="hidden" name="idpesanan" value="<?=$idp;?>">
+                                                <!-- idp apa? Lihat bagian paling atas -->
+                                            </div>
+
+                                            <!-- Modal footer -->
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-success" name="hapuspilihan">Hapus</button>
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batalkan</button>
+                                            </div>
+
+                                            </form>
+
+                                            </div>    
+                                        </div>
+                                        </div>
+
                                         <?php
                                             } //End of while
                                         ?>
