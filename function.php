@@ -177,4 +177,46 @@ if(isset($_POST['hapuspilihan'])) {
     }
 
 }
+
+// Fungsi untuk modal editdonat di halaman stok.php
+if(isset($_POST['editdonat'])) {
+    $namaproduk = $_POST['namaproduk'];
+    $harga = $_POST['harga'];
+    $stok = $_POST['stok'];
+    $idpr = $_POST['idpr']; //idproduk
+
+    $query = mysqli_query($koneksi, "UPDATE produk 
+    SET namaproduk='$namaproduk', harga='$harga', stok='$stok'
+    WHERE idproduk='$idpr'");
+
+    if ($query) {
+        header('location:stok.php');
+    } else {
+        echo '
+        <script>
+            alert("Gagal mengubah donat");
+            window.location.href="stok.php";
+        </script>
+        ';
+    }
+    
+}
+
+// Fungsi untuk modal deletedonat di halaman stok.php
+if (isset($_POST['deletedonat'])) {
+    $idpr = $_POST['idpr'];
+
+    $query = mysqli_query($koneksi, "DELETE FROM produk WHERE idproduk='$idpr'");
+
+    if ($query) {
+        header('location:stok.php');
+    } else {
+        echo '
+        <script>
+            alert("Gagal menghapus donat");
+            window.location.href="stok.php";
+        </script>
+        ';
+    }
+}
 ?>

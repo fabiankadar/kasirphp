@@ -65,7 +65,7 @@
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Jumlah Donat : <?=$jproduk;?></div>
+                                    <div class="card-body">Jenis Donat : <?=$jproduk;?></div>
                                 </div>
                             </div>                            
                         </div>
@@ -101,15 +101,87 @@
                                                 $namaproduk = $produk['namaproduk'];
                                                 $harga = $produk['harga'];
                                                 $stok = $produk['stok'];
-                                            
+                                                $idproduk = $produk['idproduk'];
                                         ?>
                                         <tr>
                                             <td><?=$i++;?></td>
                                             <td><?=$namaproduk;?></td>
-                                            <td><?=$harga;?></td>
+                                            <td>Rp. <?=number_format($harga);?></td>
                                             <td><?=$stok;?></td>
-                                            <td>Edit Delete</td>
+                                            <td>
+                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idproduk;?>">
+                                                Edit
+                                            </button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idproduk;?>">
+                                                Delete
+                                            </button>
+                                            </td>
                                         </tr>
+
+                                                    <!-- Modal untuk fungsi Edit -->
+                                            <div class="modal fade" id="edit<?=$idproduk;?>">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Edit <?=$namaproduk;?></h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <form method="post">
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    <input type="text" name="namaproduk" id="" class="form-control" placeholder="Nama Donat" value="<?=$namaproduk;?>">
+                                                    <input type="num" name="harga" id="" class="form-control mt-2" placeholder="Harga" value="<?=$harga;?>">
+                                                    <input type="num" name="stok" id="" class="form-control mt-2" placeholder="Stok" value="<?=$stok;?>">
+                                                    <input type="hidden" name="idpr" value="<?=$idproduk;?>">
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success" name="editdonat">Ubah</button>
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batalkan</button>
+                                                </div>
+
+                                                </form>
+
+                                                </div>    
+                                            </div>
+                                            </div>
+
+                                                <!-- Modal untuk fungsi Delete -->
+                                            <div class="modal fade" id="delete<?=$idproduk;?>">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Hapus <?=$namaproduk;?></h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <form method="post">
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    Konfirmasi penghapusan jenis donat.
+                                                    <input type="hidden" name="idpr" value="<?=$idproduk;?>">
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success" name="deletedonat">Hapus</button>
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batalkan</button>
+                                                </div>
+
+                                                </form>
+
+                                                </div>    
+                                            </div>
+                                            </div>
+
                                         <?php
                                             } //End of while
                                         ?>
