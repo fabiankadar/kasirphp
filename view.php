@@ -183,7 +183,7 @@
             }
             ?>
         </select>
-        <input type="number" name="qty" class="form-control mt-2" placeholder="Jumlah">
+        <input type="number" name="qty" class="form-control mt-2" placeholder="Jumlah" min="1" required>
         <input type="hidden" name="idp" value="<?=$idp;?>">
       </div>
 

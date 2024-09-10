@@ -1,5 +1,10 @@
 <?php
     require 'ceklogin.php';
+    
+    //Hitung jumlah pesanan
+    $hpesanan = mysqli_query($koneksi, "SELECT * FROM pesanan");
+    //Jumlah pesanan
+    $jpesanan = mysqli_num_rows($hpesanan);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +65,7 @@
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Jumlah Pesanan :</div>
+                                    <div class="card-body">Jumlah Pesanan : <?=$jpesanan;?></div>
                                 </div>
                             </div>                            
                         </div>

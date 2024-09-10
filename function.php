@@ -62,8 +62,6 @@ if(isset($_POST['tambahpelanggan'])) {
     $notelp = $_POST['notelp'];
     $alamat = $_POST['alamat'];
 
-    //Catatan penting: perhatikan penggunaan tanda kutip satu maupun dua
-    //Saya error karena nama variabel tidak disertai tanda kutip
     $insert = mysqli_query($koneksi,
     "INSERT INTO pelanggan (namapelanggan,notelp,alamat) VALUES ('$namapelanggan','$notelp','$alamat')"
     );
@@ -84,8 +82,6 @@ if(isset($_POST['tambahpelanggan'])) {
 if(isset($_POST['tambahpesanan'])) {
     $idpelanggan = $_POST['idpelanggan'];
 
-    //Catatan penting: perhatikan penggunaan tanda kutip satu maupun dua
-    //Saya error karena nama variabel tidak disertai tanda kutip
     $insert = mysqli_query($koneksi,
     "INSERT INTO pesanan (idpelanggan) VALUES ('$idpelanggan')"
     );
@@ -106,23 +102,45 @@ if(isset($_POST['tambahpesanan'])) {
 if(isset($_POST['pilihdonat'])) {
     $idproduk = $_POST['idproduk'];
     $idp = $_POST['idp'];
-    $qty = $_POST['qty'];
+    $qty = $_POST['qty'];//Jumlah donat yang ingin dipesan
 
-    //Catatan penting: perhatikan penggunaan tanda kutip satu maupun dua
-    //Saya error karena nama variabel tidak disertai tanda kutip
-    $insert = mysqli_query($koneksi,
-    "INSERT INTO detailpesanan (idpesanan,idproduk,qty) VALUES ('$idp', '$idproduk', '$qty')"
-    );
+    // Hitung stok sekarang ada berapa
+    $hitung1 = mysqli_query($koneksi, "SELECT * FROM produk WHERE idproduk='$idproduk'");
+    $hitung2 = mysqli_fetch_array($hitung1);
+    $stoksekarang = $hitung2['stok'];
 
-    if($insert) {
-        header('location:view.php?idp='.$idp);
+    if($stoksekarang>=$qty) {
+        // Kurangi stok dengan jumlah yang dipilih
+        $selisih = $stoksekarang - $qty;
+
+
+        //Stok cukup
+        $insert = mysqli_query($koneksi,
+        "INSERT INTO detailpesanan (idpesanan,idproduk,qty)
+        VALUES ('$idp', '$idproduk', '$qty')");
+
+        $updatejumlah = mysqli_query($koneksi,
+        "UPDATE produk SET stok='$selisih'
+        WHERE idproduk='$idproduk'");
+
+        if($insert&&$update) {
+            header('location:view.php?idp='.$idp);
+        } else {
+            echo '
+            <script>
+                alert("Gagal memilih donat");
+                window.location.href="view.php?idp='.$idp.'";
+            </script>
+            ';
+    }
     } else {
+        //Stok kurang
         echo '
-        <script>
-            alert("Gagal menambahkan pesanan");
-            window.location.href="view.php?idp="'.$idp.';
-        </script>
-        ';
+            <script>
+                alert("Stok barang tidak cukup");
+                window.location.href="view.php?idp='.$idp.'";
+            </script>
+            ';
     }
 }
 ?>
