@@ -113,12 +113,48 @@
                                             <td>Rp. <?=number_format($harga);?></td>
                                             <td><?=number_format($qty);?></td>
                                             <td>Rp. <?=number_format($subtotal);?></td>
-                                            <td>Edit
-                                            <button type="button" class="btn btn-danger mb-3" data-bs-toggle="modal" data-bs-target="#delete<?=$idpr;?>">
-                                            Hapus
+                                            <td>
+                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#edit<?=$idpr;?>">
+                                            Edit
+                                            </button>
+                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idpr;?>">
+                                            Delete
                                             </button>
                                             </td>
                                         </tr>
+                                                <!-- Modal untuk mengubah pilihan donat -->
+                                        <div class="modal fade" id="edit<?=$idpr;?>">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Edit Jumlah Donat</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <form method="post">
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    <input type="text" name="namaproduk" id="" class="form-control" placeholder="Nama Donat" value="<?=$namaproduk;?>" disabled>
+                                                    <input type="num" name="qty" id="" class="form-control mt-2" placeholder="Stok" value="<?=$qty;?>">
+                                                    <input type="hidden" name="idpr" value="<?=$idpr;?>">
+                                                    <input type="hidden" name="iddp" value="<?=$iddp;?>">
+                                                    <input type="hidden" name="idp" value="<?=$idp;?>">
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success" name="editpilihandonat">Ubah</button>
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batalkan</button>
+                                                </div>
+
+                                                </form>
+
+                                                </div>    
+                                            </div>
+                                            </div>
 
                                                     <!-- Modal untuk menghapus pilihan donat -->
                                         <div class="modal fade" id="delete<?=$idpr;?>">

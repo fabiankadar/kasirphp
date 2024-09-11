@@ -123,16 +123,9 @@ if(isset($_POST['pilihdonat'])) {
         "UPDATE produk SET stok='$selisih'
         WHERE idproduk='$idproduk'");
 
-        if($insert&&$update) {
+        if($insert && $update) {
             header('location:view.php?idp='.$idp);
-        } else {
-            echo '
-            <script>
-                alert("Gagal memilih donat");
-                window.location.href="view.php?idp='.$idp.'";
-            </script>
-            ';
-    }
+        } 
     } else {
         //Stok kurang
         echo '
@@ -217,6 +210,145 @@ if (isset($_POST['deletedonat'])) {
             window.location.href="stok.php";
         </script>
         ';
+    }
+}
+
+// Fungsi untuk modal editpelanggan di halaman pelanggan.php
+if(isset($_POST['editpelanggan'])) {
+    $namapelanggan = $_POST['namapelanggan'];
+    $notelp = $_POST['notelp'];
+    $alamat = $_POST['alamat'];
+    $idpelanggan = $_POST['idpelanggan']; //idproduk
+
+    $query = mysqli_query($koneksi, "UPDATE pelanggan 
+    SET namapelanggan='$namapelanggan', notelp='$notelp', alamat='$alamat'
+    WHERE idpelanggan='$idpelanggan'");
+
+    if ($query) {
+        header('location:pelanggan.php');
+    } else {
+        echo '
+        <script>
+            alert("Gagal mengubah data pelanggan");
+            window.location.href="pelanggan.php";
+        </script>
+        ';
+    }
+    
+}
+
+// Fungsi untuk modal deletepelanggan di halaman pelanggan.php
+if (isset($_POST['deletepelanggan'])) {
+    $idpelanggan = $_POST['idpelanggan'];
+
+    $query = mysqli_query($koneksi, "DELETE FROM pelanggan WHERE idpelanggan='$idpelanggan'");
+
+    if ($query) {
+        header('location:pelanggan.php');
+    } else {
+        echo '
+        <script>
+            alert("Gagal menghapus pelanggan");
+            window.location.href="pelanggan.php";
+        </script>
+        ';
+    }
+}
+
+// Fungsi untuk modal deletepesanan di halaman index.php
+if (isset($_POST['deletepesanan'])) {
+    $idpesanan = $_POST['idpesanan'];
+
+    $cekdetail = mysqli_query($koneksi, "SELECT * FROM detailpesanan dp WHERE idpesanan='$idpesanan'");
+
+    while($cd=mysqli_fetch_array($cekdetail)) {
+        // Balikkan stok donat
+        $idproduk = $cd['idproduk'];
+        $iddp = $cd['iddetailpesanan'];
+        $qty = $cd['qty'];
+
+        $cekstok1 = mysqli_query($koneksi, "SELECT * FROM produk WHERE idproduk='$idproduk'");
+        $cekstok2 = mysqli_fetch_array($cekstok1);
+        $stokdonat = $cekstok2['stok'];
+
+        $stokbaru = $stokdonat + $qty;
+
+        $updatestok = mysqli_query($koneksi, "UPDATE produk SET stok='$stokbaru' WHERE idproduk ='$idproduk'");
+
+        // Hapus data detail pesanan
+        $hapusdetailpesanan = mysqli_query($koneksi, "DELETE FROM detailpesanan WHERE iddetailpesanan='$iddp'");
+    }
+    // Redirect
+    $query = mysqli_query($koneksi, "DELETE FROM pesanan WHERE idpesanan='$idpesanan'");
+
+    if ($updatestok && $hapusdetailpesanan && $query) {
+        header('location:index.php');
+    } else {
+        echo '
+        <script>
+            alert("Gagal menghapus pesanan");
+            window.location.href="index.php";
+        </script>
+        ';
+    }
+}
+
+//Fungsi modal untuk halaman view.php, ubah pilihan donat
+if(isset($_POST['editpilihandonat'])) {
+    $qty = $_POST['qty'];
+    $idpr = $_POST['idpr'];
+    $iddp = $_POST['iddp'];
+    $idp = $_POST['idp'];
+
+    // Cek qty saat ini
+    $cek1 = mysqli_query($koneksi, "SELECT * FROM detailpesanan WHERE iddetailpesanan='$iddp'");
+    $cek2 = mysqli_fetch_array($cek1);
+    $qtysekarang = $cek2['qty'];
+
+    //Cek stok saat ini
+    $cek3 = mysqli_query($koneksi, "SELECT * FROM produk WHERE idproduk='$idpr'");
+    $cek4 = mysqli_fetch_array($cek3);
+    $stokdonatsekarang = $cek4['stok'];
+
+    if($qty >= $qtysekarang){
+        // Kalau inputan user lebih besar atau sama dengan qty yang sekarang
+        // Hitung selisih
+        $selisih = $qty - $qtysekarang;
+        $stokbaru = $stokdonatsekarang - $selisih;
+
+        $query1 = mysqli_query($koneksi, "UPDATE detailpesanan SET qty='$qty' WHERE iddetailpesanan='$iddp'");
+        $query2 = mysqli_query($koneksi, "UPDATE produk set stok='$stokbaru' WHERE idproduk='$idpr'");
+
+        if($query1 && $query2){
+            header('location:view.php?idp='.$idp);
+        } else {
+            echo '
+            <script>
+                alert("Gagal memilih donat");
+                window.location.href="view.php?idp='.$idp.'";
+            </script>
+            ';
+        }
+
+    } else {
+        // Kalau inputan user lebih kecil
+        // Hitung selisih
+        $selisih = $qtysekarang - $qty ;
+        $stokbaru = $stokdonatsekarang + $selisih;
+
+        $query1 = mysqli_query($koneksi, "UPDATE detailpesanan SET qty='$qty' WHERE iddetailpesanan='$iddp'");
+        $query2 = mysqli_query($koneksi, "UPDATE produk set stok='$stokbaru' WHERE idproduk='$idpr'");
+
+        if($query1 && $query2){
+            header('location:view.php?idp='.$idp);
+        } else {
+            echo '
+            <script>
+                alert("Gagal memilih donat");
+                window.location.href="view.php?idp='.$idp.'";
+            </script>
+            ';
+        }
     }
 }
 ?>

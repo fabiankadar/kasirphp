@@ -118,8 +118,43 @@
                                                 <a href="view.php?idp=<?=$idpesanan;?>" class="btn btn-primary" target="blank">
                                                 Tampilkan
                                                 </a>
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete<?=$idpesanan;?>">
+                                                Delete
+                                                </button>
                                             </td>
                                         </tr>
+
+                                                <!-- Modal untuk fungsi Delete -->
+                                            <div class="modal fade" id="delete<?=$idpesanan;?>">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Hapus Pesanan <?=$namapelanggan;?></h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </div>
+
+                                                <form method="post">
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    Konfirmasi penghapusan pesanan.
+                                                    <input type="hidden" name="idpesanan" value="<?=$idpesanan;?>">
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-success" name="deletepesanan">Hapus</button>
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batalkan</button>
+                                                </div>
+
+                                                </form>
+
+                                                </div>    
+                                            </div>
+                                            </div>
+
                                         <?php
                                             } //End of while
                                         ?>
